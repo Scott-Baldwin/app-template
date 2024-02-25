@@ -5,7 +5,7 @@ import dearpygui.demo as demo
 
 
 app_path = os.path.dirname(os.path.abspath(__file__))
-icon = os.path.join(app_path, "data", "rocket.ico")
+icon = os.path.join(app_path, "data", "app_icon.ico")
 
 
 def main():
