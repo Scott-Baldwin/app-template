@@ -17,7 +17,7 @@ def main():
     dpg.setup_dearpygui()
     dpg.show_viewport()
 
-    # had to pull window id from source code
+    # had to pull window id from show_demo source code
     dpg.set_primary_window("__demo_id", True)
 
     dpg.start_dearpygui()
