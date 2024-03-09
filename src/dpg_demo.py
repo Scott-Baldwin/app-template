@@ -10,7 +10,9 @@ icon = os.path.join(app_path, "data", "app_icon.ico")
 
 def main():
     dpg.create_context()
-    dpg.create_viewport(title="DPG Demo", width=650, height=450, large_icon=icon)
+    dpg.create_viewport(
+        title="DPG Built-in Demo", width=650, height=450, large_icon=icon
+    )
 
     demo.show_demo()
 
