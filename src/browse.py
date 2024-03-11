@@ -3,7 +3,7 @@ import tkinter as tk
 from tkinter import filedialog
 
 app_path = os.path.dirname(os.path.abspath(__file__))
-icon_path = os.path.join(app_path, "data", "file.ico")
+icon_path = os.path.join(app_path, "data", "icons", "file.ico")
 
 
 def file_browse(multiple=False, **args):
