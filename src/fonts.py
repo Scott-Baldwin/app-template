@@ -37,6 +37,8 @@ def register_fonts(s=20):
         "OpenSans-Regular.ttf",
         "SourceSansPro-Regular.otf",
         "Montserrat-Light.otf",
+        "Montserrat-Regular.otf",
+        "Montserrat-Black.otf",
         "Quicksand-Regular.otf",
     ]
     paths = [join(dirname(abspath(__file__)), "data", "fonts", f) for f in fonts]
