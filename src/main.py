@@ -11,8 +11,10 @@ class InputFiles:
     path_2 = None
 
 
-def print_saved_path():
-    print(InputFiles.path_1)
+def test():
+    dpg.show_font_manager()
+    # fonts.font_manager()
+    # print(InputFiles.path_1)
 
 
 def file_browse_callback(sender, value, user_data):
@@ -144,9 +146,9 @@ def create_layout():
             file_browse_group("path_1")
             folder_browse_group("path_2")
             dpg.add_button(
-                label="print",
+                label="test",
                 tag="print_path",
-                callback=print_saved_path,
+                callback=test,
             )
 
         dpg.add_loading_indicator(circle_count=8)
