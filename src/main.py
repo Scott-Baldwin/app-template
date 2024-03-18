@@ -1,85 +1,63 @@
 import os
+from webbrowser import get
 import dearpygui.dearpygui as dpg
+
+import browse, fonts
 
 
 app_path = os.path.dirname(os.path.abspath(__file__))
-icon = os.path.join(app_path, "data", "icons", "app_icon.ico")
+icon = os.path.join(app_path, "data", "app_icon.ico")
 
 
-class Motor:
-    def __init__(self, burn_time, thrust, totalMass, propellantMass):
-        self.burn_time = burn_time
-        self.thrust = thrust
-        self.totalMass = totalMass
-        self.propellantMass = propellantMass
+class InputFiles:
+    path_1 = None
+    path_2 = None
 
 
-motorList = {"Name": [], "Motor": []}
+def file_browse_callback(sender, value, user_data):
+    path = browse.file_browse()
+    if path is not None:
+        setattr(InputFiles, user_data, path)
+        dpg.set_value(f"check_{user_data}", True)
+        dpg.set_value(f"tip_{user_data}", path)
 
 
-def defineMotor(sender, data, user_data):
-    motorList["Name"].append(dpg.get_value(user_data[0]))
-    motorList["Motor"].append(
-        Motor(
-            dpg.get_value(user_data[1]),
-            dpg.get_value(user_data[2]),
-            dpg.get_value(user_data[3]),
-            dpg.get_value(user_data[4]),
-        )
-    )
-    dpg.configure_item(motor, items=motorList["Name"])
+def add_file_browse_group(file_tag):
+    with dpg.group(horizontal=True):
+        dpg.add_text(f"File path: ({file_tag})", tag=f"text_{file_tag}")
+        dpg.add_button(label="...", callback=file_browse_callback, user_data=file_tag)
+        dpg.add_checkbox(tag=f"check_{file_tag}", enabled=False)
+    with dpg.tooltip(f"text_{file_tag}"):
+        dpg.add_text(getattr(InputFiles, file_tag), tag=f"tip_{file_tag}", wrap=400)
 
 
-def select_motor(sender, data):
-    index = motorList["Name"].index(data)
-    motor = motorList["Motor"][index]
-
-    print("Data: ", data)
-    print(motor.burn_time, motor.thrust, motor.totalMass)
-
-
-def print_motor(sender, data, user_data):
-    name = dpg.get_value(user_data)
-    print(name)
-    # index = motorList["Name"].index(name)
-    # motor = motorList["Motor"][index]
-
-    # print("Data: ", data)
-    # print(motor.burn_time, motor.thrust, motor.totalMass)
+def print_saved_path():
+    print(InputFiles.path_1)
 
 
 dpg.create_context()
-dpg.create_viewport(title="Main", width=500, height=600, large_icon=icon)
+dpg.create_viewport(
+    title="App Template", width=200, height=100, large_icon=icon, small_icon=icon
+)
 
-with dpg.window(
-    label="Define Motor", height=200, width=500, no_close=True, no_move=True
-):
-    name = dpg.add_input_text(label="Name")
-    burn_time = dpg.add_input_int(label="Burn Time")
-    thrust = dpg.add_input_float(label="Thrust")
-    totalMass = dpg.add_input_float(label="Total Mass")
-    propellantMass = dpg.add_input_float(label="Propellant Mass")
-    dpg.add_button(
-        label="Save",
-        callback=defineMotor,
-        user_data=[name, burn_time, thrust, totalMass, propellantMass],
-    )
+fonts.set_default(i=0, s=20)
 
+with dpg.window(label="Main", tag="Main", no_close=True, no_move=True):
+    with dpg.collapsing_header(label="Tab 1"):
+        add_file_browse_group("path_1")
+        add_file_browse_group("path_2")
+        dpg.add_button(
+            label="print",
+            tag="print_path",
+            callback=print_saved_path,
+        )
 
-with dpg.window(
-    label="Motors", height=200, width=300, pos=[0, 200], no_close=True, no_move=True
-):
-    motor = dpg.add_listbox(
-        items=motorList["Name"], label="Motors", callback=select_motor
-    )
-    dpg.add_button(
-        label="Print",
-        callback=print_motor,
-        user_data=motor,
-    )
+    dpg.add_loading_indicator(circle_count=8)
 
 dpg.setup_dearpygui()
 dpg.show_viewport()
+
+dpg.set_primary_window("Main", True)
 
 dpg.start_dearpygui()
 dpg.destroy_context()
