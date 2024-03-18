@@ -23,7 +23,7 @@ def file_browse_callback(sender, value, user_data):
         dpg.set_value(f"tip_{user_data}", path)
 
 
-def add_file_browse_group(file_tag):
+def file_browse_group(file_tag):
     with dpg.group(horizontal=True):
         dpg.add_button(
             label="...",
@@ -44,7 +44,7 @@ def folder_browse_callback(sender, value, user_data):
         dpg.set_value(f"tip_{user_data}", path)
 
 
-def add_folder_browse_group(folder_tag):
+def folder_browse_group(folder_tag):
     with dpg.group(horizontal=True):
         dpg.add_button(
             label="...",
@@ -57,12 +57,92 @@ def add_folder_browse_group(folder_tag):
         dpg.add_text(getattr(InputFiles, folder_tag), tag=f"tip_{folder_tag}", wrap=400)
 
 
+def custom_menu_bar():
+    # def _log(sender, app_data, user_data):
+    #     print(f"sender: {sender}, \t app_data: {app_data}, \t user_data: {user_data}")
+
+    with dpg.menu_bar():
+        # copied from dpg demo script
+
+        with dpg.menu(label="Menu"):
+
+            dpg.add_text("This menu is just for show!")
+            # dpg.add_menu_item(label="New")
+            # dpg.add_menu_item(label="Open")
+
+            # with dpg.menu(label="Open Recent"):
+
+            #     dpg.add_menu_item(label="harrel.c")
+            #     dpg.add_menu_item(label="patty.h")
+            #     dpg.add_menu_item(label="nick.py")
+
+            # dpg.add_menu_item(label="Save")
+            # dpg.add_menu_item(label="Save As...")
+
+            # with dpg.menu(label="Settings"):
+
+            #     dpg.add_menu_item(label="Option 1", callback=_log)
+            #     dpg.add_menu_item(label="Option 2", check=True, callback=_log)
+            #     dpg.add_menu_item(
+            #         label="Option 3", check=True, default_value=True, callback=_log
+            #     )
+
+            #     with dpg.child_window(height=60, autosize_x=True, delay_search=True):
+            #         for i in range(10):
+            #             dpg.add_text(f"Scolling Text{i}")
+
+            #     dpg.add_slider_float(label="Slider Float")
+            #     dpg.add_input_int(label="Input Int")
+            #     dpg.add_combo(("Yes", "No", "Maybe"), label="Combo")
+
+        with dpg.menu(label="Tools"):
+
+            dpg.add_menu_item(
+                label="Show About", callback=lambda: dpg.show_tool(dpg.mvTool_About)
+            )
+            dpg.add_menu_item(
+                label="Show Metrics", callback=lambda: dpg.show_tool(dpg.mvTool_Metrics)
+            )
+            dpg.add_menu_item(
+                label="Show Documentation",
+                callback=lambda: dpg.show_tool(dpg.mvTool_Doc),
+            )
+            dpg.add_menu_item(
+                label="Show Debug", callback=lambda: dpg.show_tool(dpg.mvTool_Debug)
+            )
+            dpg.add_menu_item(
+                label="Show Style Editor",
+                callback=lambda: dpg.show_tool(dpg.mvTool_Style),
+            )
+            dpg.add_menu_item(
+                label="Show Font Manager",
+                callback=lambda: dpg.show_tool(dpg.mvTool_Font),
+            )
+            dpg.add_menu_item(
+                label="Show Item Registry",
+                callback=lambda: dpg.show_tool(dpg.mvTool_ItemRegistry),
+            )
+
+        with dpg.menu(label="Settings"):
+
+            dpg.add_menu_item(
+                label="Wait For Input",
+                check=True,
+                callback=lambda s, a: dpg.configure_app(wait_for_input=a),
+            )
+            dpg.add_menu_item(
+                label="Toggle Fullscreen",
+                callback=lambda: dpg.toggle_viewport_fullscreen(),
+            )
+
+
 # %% main layout
 def create_layout():
     with dpg.window(label="Main", tag="Main", no_close=True, no_move=True):
+        custom_menu_bar()
         with dpg.collapsing_header(label="Files"):
-            add_file_browse_group("path_1")
-            add_folder_browse_group("path_2")
+            file_browse_group("path_1")
+            folder_browse_group("path_2")
             dpg.add_button(
                 label="print",
                 tag="print_path",
