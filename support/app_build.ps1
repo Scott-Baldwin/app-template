@@ -14,7 +14,7 @@ $versionScript = ".\support\create_version_file.py"
 & $venvPath\Scripts\python.exe $versionScript
 
 # Run the pyinstaller command
-$launcherFile = ".\src\dpg_demo.py"
+$launcherFile = ".\src\main.py"
 $pyInstallerExecutable = "pyinstaller"
 $appName = "template_app"
 $versionFile = ".\support\app_version_info.txt"
