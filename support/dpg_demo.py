@@ -1,8 +1,11 @@
-import os
+import os, sys
+
 
 import dearpygui.dearpygui as dpg
 import dearpygui.demo as demo
 
+
+sys.path.append("./src")  # add this to find font module in adjacent folder
 import fonts
 
 
