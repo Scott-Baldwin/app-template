@@ -7,8 +7,8 @@ import browse, fonts
 
 # %% files and folders
 class InputFiles:
-    path_1 = None
-    path_2 = None
+    file_path = None
+    folder_path = None
 
 
 def test():
@@ -33,7 +33,7 @@ def file_browse_group(file_tag):
             user_data=file_tag,
         )
         dpg.add_checkbox(tag=f"check_{file_tag}", enabled=False)
-        dpg.add_text(f"File path: ({file_tag})", tag=f"text_{file_tag}")
+        dpg.add_text(f"{file_tag}", tag=f"text_{file_tag}")
     with dpg.tooltip(f"text_{file_tag}"):
         dpg.add_text(getattr(InputFiles, file_tag), tag=f"tip_{file_tag}", wrap=400)
 
@@ -54,7 +54,7 @@ def folder_browse_group(folder_tag):
             user_data=folder_tag,
         )
         dpg.add_checkbox(tag=f"check_{folder_tag}", enabled=False)
-        dpg.add_text(f"Folder path: ({folder_tag})", tag=f"text_{folder_tag}")
+        dpg.add_text(f"{folder_tag}", tag=f"text_{folder_tag}")
     with dpg.tooltip(f"text_{folder_tag}"):
         dpg.add_text(getattr(InputFiles, folder_tag), tag=f"tip_{folder_tag}", wrap=400)
 
@@ -142,14 +142,39 @@ def custom_menu_bar():
 def create_layout():
     with dpg.window(label="Main", tag="Main", no_close=True, no_move=True):
         custom_menu_bar()
+
         with dpg.collapsing_header(label="Files"):
-            file_browse_group("path_1")
-            folder_browse_group("path_2")
+            file_browse_group("file_path")
+            folder_browse_group("folder_path")
             dpg.add_button(
                 label="test",
-                tag="print_path",
+                tag="test",
                 callback=test,
             )
+
+        with dpg.collapsing_header(label="Controls"):
+            dpg.add_input_text(label="text input")
+            dpg.add_input_int(label="int input")
+            dpg.add_input_float(label="float input")
+
+        with dpg.collapsing_header(label="Data"):
+            # basic usage of the table api
+            with dpg.table(header_row=False):
+
+                # use add_table_column to add columns to the table,
+                # table columns use slot 0
+                dpg.add_table_column()
+                dpg.add_table_column()
+                dpg.add_table_column()
+
+                # add_table_next_column will jump to the next row
+                # once it reaches the end of the columns
+                # table next column use slot 1
+                for i in range(4):
+
+                    with dpg.table_row():
+                        for j in range(3):
+                            dpg.add_text(f"Row{i} Column{j}")
 
         dpg.add_loading_indicator(circle_count=8)
 
