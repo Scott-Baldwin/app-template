@@ -1,5 +1,7 @@
 # %% imports
 import os
+
+import pandas as pd
 import dearpygui.dearpygui as dpg
 
 import browse, fonts
@@ -138,6 +140,20 @@ def custom_menu_bar():
             )
 
 
+def update_table_callback(sender, value, user_data):
+    print("implement me")
+    # data_path = user_data
+    # df = pd.read_csv(data_path)
+    # arr = df.to_numpy()
+    # with dpg.table(tag="Data"):
+    #     for i in range(df.shape[1]):
+    #         dpg.add_table_column(label=df.columns[i])
+    #     for i in range(df.shape[0]):
+    #         with dpg.table_row():
+    #             for j in range(df.shape[1]):
+    #                 dpg.add_text(f"{arr[i,j]}")
+
+
 # %% main layout
 def create_layout():
     with dpg.window(label="Main", tag="Main", no_close=True, no_move=True):
@@ -158,23 +174,23 @@ def create_layout():
             dpg.add_input_float(label="float input")
 
         with dpg.collapsing_header(label="Data"):
-            # basic usage of the table api
-            with dpg.table(header_row=False):
 
-                # use add_table_column to add columns to the table,
-                # table columns use slot 0
-                dpg.add_table_column()
-                dpg.add_table_column()
-                dpg.add_table_column()
+            app_path = os.path.dirname(os.path.abspath(__file__))
+            data_path = os.path.join(app_path, "data", "data.csv")
+            df = pd.read_csv(data_path)
+            arr = df.to_numpy()
 
-                # add_table_next_column will jump to the next row
-                # once it reaches the end of the columns
-                # table next column use slot 1
-                for i in range(4):
+            dpg.add_button(
+                label="Update", callback=update_table_callback, user_data=data_path
+            )
 
+            with dpg.table(label="Data"):
+                for i in range(df.shape[1]):
+                    dpg.add_table_column(label=df.columns[i])
+                for i in range(df.shape[0]):
                     with dpg.table_row():
-                        for j in range(3):
-                            dpg.add_text(f"Row{i} Column{j}")
+                        for j in range(df.shape[1]):
+                            dpg.add_text(f"{arr[i,j]}")
 
         dpg.add_loading_indicator(circle_count=8)
 
